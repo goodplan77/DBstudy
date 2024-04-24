@@ -209,4 +209,76 @@ WHERE HIRE_DATE BETWEEN '90/01/01' AND '03/01/01'; -- 1990.01.01 ~ 2003.01.01
 -- 입사일이 '90/01/01' ~ '03/01/01' 이 아닌 사원들의 모든 컬럼 조회
 SELECT *
 FROM EMPLOYEE
-WHERE HIRE_DATE NOT BETWEEN '90/01/01' AND '03/01/01'; 
+WHERE HIRE_DATE NOT BETWEEN '90/01/01' AND '03/01/01';
+
+/*
+    <LIKE '특정패턴'>
+    비교하고자 하는 컬럼값이 내가 지정한 특정 패턴에 만족될 경우 조회
+    
+    [표현법]
+    비교대상 칼럼명 LIKE '특정패턴'
+    
+    - 옵션 : 특정패턴 부분에 와일드카드인 '%' , '_'를 가지고 제시 할 수 있음.
+    
+    '%' : 0 글자 이상
+            비교대상컬럼명 LIKE '문자%' => 컬럼값 중에 '문자'로 시작하는 모든 값을 조회
+            비교대상컬럼명 LIKE '%문자' => 컬럼값 중에 '문자'로 종료하는 모든 값을 조회
+            비교대상컬럼명 LIKE '%문자%' => 컬럼값 중에 '문자'가 포함되는 모든 값을 조회
+    '_' : 1글자
+            비교대상컬럼명 LIKE '_문자' => 해당 컬럼값중 '문자' 앞에 무조건 1글자가 존재 하는 경우 조회.
+            비교대상컬럼명 LIKE '__문자' => 해당 컬럼값중 '문자' 앞에 무조건 2글자가 존재 하는 경우 조회.
+*/
+-- 성이 전씨인 사원들의 이름 , 급여 , 입사일 조회.
+SELECT EMP_NAME,SALARY,HIRE_DATE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '전%';
+
+-- 이름중에 '하'가 포함된 사원들의 이름 , 주민번호 , 부서코드 조회
+SELECT EMP_NAME,EMP_NO,DEPT_CODE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '%하%';
+
+-- 전화번호 4번째자리가 9로 시작하는 사원들의 사번, 사원명,전 화번호, 이메일 조회
+SELECT EMP_NO ,EMP_NAME, PHONE, EMAIL
+FROM EMPLOYEE
+WHERE PHONE LIKE '___9%';
+
+-- 이메일 번호중 네번째 문자 위치에 _가 있는 사원을 찾으려면?
+SELECT EMP_NO ,EMP_NAME, PHONE, EMAIL
+FROM EMPLOYEE
+WHERE EMAIL LIKE '___\_%' ESCAPE '\';
+-- 이스케이프 기능 활용. _나 %는 LIKE절 안에서 와일드카드로 활용된다.
+-- 따라서 와일드카드가 아닌 순수 문자 % 나 _로
+-- 쓰고 싶다면 이스케이프 문법을 사용해야한다.
+
+-- 실습 문제 --
+-- 1. 이름이 연으로 끝나는 사원들의 이름 , 입사일 조회
+SELECT EMP_NAME , HIRE_DATE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '%연';
+
+-- 2. 전화번호 처음 3글자가 010이 아닌 사원들의 이름, 전화번호 조회
+SELECT EMP_NAME, PHONE
+FROM EMPLOYEE
+WHERE NOT PHONE LIKE '010%';
+
+-- 3. Department 테이블에서 해외영업과 관련된 부서들의 모든 칼럼 조회
+SELECT *
+FROM Department
+WHERE DEPT_TITLE LIKE '해외영업%';
+
+/*
+    <IS NULL>
+    해당 값이 NULL인지 비교 해주는 연산자
+    비교대상칼럼 IS NULL : 칼럼 값이 NULL일 경우 참
+    비교대상칼럼 IS NO NULL : 칼럼 값이 NULL이 아닐 경우 참
+*/
+-- 보너스를 받지 않는 사원들 (== BONUS 컬럼 값이 NULL인) 의 사번, 이름, 보너스
+SELECT EMP_ID , EMP_NAME , BONUS
+FROM EMPLOYEE
+WHERE BONUS IS NOT NULL;
+
+-- 사수가 없는 사원들의 사원명, 사수 사번 , 부서 코드 조회
+SELECT EMP_NAME , MANAGER_ID , DEPT_CODE
+FROM EMPLOYEE
+WHERE MANAGER_ID IS NULL;
