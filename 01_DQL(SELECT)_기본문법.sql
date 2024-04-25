@@ -282,3 +282,32 @@ WHERE BONUS IS NOT NULL;
 SELECT EMP_NAME , MANAGER_ID , DEPT_CODE
 FROM EMPLOYEE
 WHERE MANAGER_ID IS NULL;
+
+/*
+    <IN>
+    비교 대상 칼럼 값에 내가 제시한 목록들 중 일치하는 값이 있는지 판단하고자 할 때 사용
+    
+    [표현법]
+    비교대상칼럼 (값1,값2,값3)
+*/
+-- 부서코드가 D6 이거나 D8 이거나 D5인 사원의 이름 , 부서코드 , 급여를 조회
+SELECT EMP_NAME,DEPT_CODE,SALARY
+FROM EMPLOYEE
+--WHERE DEPT_CODE = 'D6' OR DEPT_CODE = 'D8' OR DEPT_CODE = 'D5'; 
+WHERE DEPT_CODE IN ('D6','D8','D5');
+
+-- 직급코드가 J1도 아니고 , J3도 아니고 , J4도 아닌 사원들의 모든 칼럼 조회
+SELECT *
+FROM EMPLOYEE
+WHERE JOB_CODE NOT IN('J1','J3','J4');
+
+/*
+    <연결연산자 || >
+    여러 컬럼값들을 하나의 컬럼인것 처럼 연결시켜주는 연산자
+    컬럼값 + 리터럴값으로 연결도 가능하다.
+*/
+SELECT EMP_NAME || EMP_NO || SALARY AS "연결됨"
+FROM EMPLOYEE;
+
+-- XX번 XXX의 월급은 XXXX원 입니다.
+-- 칼럼명 급여정보
