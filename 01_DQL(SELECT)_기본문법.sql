@@ -311,3 +311,70 @@ FROM EMPLOYEE;
 
 -- XX번 XXX의 월급은 XXXX원 입니다.
 -- 칼럼명 급여정보
+SELECT EMP_ID || '번' || EMP_NAME || '의 월급은' || SALARY || '원 입니다.' 급여정보
+FROM EMPLOYEE;
+
+/*
+    <연산자 우선순위>
+    1. ()
+    2. 산술연산자
+    3. 연결연산자(||)
+    4. 비교연산자
+    5. IS NULL, LIKE , IN
+    6. BETWEEN AND
+    7. NOT
+    8. AND
+    9. OR
+*/
+
+/*
+    <ORDER BY 절>
+    SELECT 문 마지막에 기입하는 구문이면서 가장 마지막에 실행되는 구문
+    최종 조회된 결과물들에 대해서 정렬 기준을 세워주는 구문.
+    1) FROM
+    2) WHERE
+    3) SELECT
+    4) ORDER BY
+    
+    [표현법]
+    SELECT 조회갈 칼럼1 , 칼럼2 , ...
+    FROM 조회할 테이블명
+    WHERE 조건식...
+    ORDER BY (정렬기준으로 세우고자하는 칼럼명/별칭/컬럼순번) [ASC/DSEC] [NULLS FIRST / NULLS LAST]
+    
+        오름차순 / 내림차순
+        - ASC : 오름차순 (기본값)
+        - DESC : 내림차순
+        
+        정렬하고자 하는 칼럼에 NULL값이 있을경우
+        - NULLS FIRST : NULL 값 들을 맨 앞으로 배치 (내림차순 정렬시 기본 값) NULL -> 내림차순
+        - NULLS LAST : NULL 값 들을 맨 뒤로 배치 (오름차순 정렬시 기본 값) 오름차순 -> NULL
+*/
+
+-- 월급이 높은 사람들 부터 나열
+SELECT *
+FROM EMPLOYEE
+ORDER BY SALARY DESC;
+
+-- 월급이 낮은 사람들 부터 나열
+SELECT *
+FROM EMPLOYEE
+ORDER BY SALARY; -- ASC;
+
+-- BONUS 기준 정렬
+SELECT *
+FROM EMPLOYEE
+-- ORDER BY BONUS ASC; -- 오름차순 정렬은 NULLS LAST 기본값
+-- ORDER BY BONUS DESC; -- 내림차순 정렬은 NULLS FIRST 기본값
+-- ORDER BY BONUS NULLS LAST;
+-- 추가적인 정렬조건 제시 하기 (정렬조건으로 세운 앞의 값이 동일한 경우 사용)
+ORDER BY BONUS DESC , SALARY DESC ;
+
+-- 연봉 기준 정렬
+SELECT EMP_NAME , SALARY , SALARY * 12 연봉 -- 3
+FROM EMPLOYEE -- 1
+-- WHERE 연봉 < 50000000
+WHERE SALARY * 12 < 50000000 -- 2
+-- ORDER BY 연봉 DESC;
+-- ORDER BY 3 DESC;
+ORDER BY SALARY * 12 DESC; --4
