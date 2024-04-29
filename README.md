@@ -5,4 +5,8 @@
 Oracle SQL 사용
 
 01. DQL (SELECT)
+    - SELECT 기본 문법
+    - Function
+    - GROUPBY
+    - JOIN
 
