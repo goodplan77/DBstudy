@@ -2,6 +2,7 @@
 
 4/22 ~ 5/13 데이터 베이스 수업용 repositories 입니다.
 
+
 Oracle SQL 사용
 
 01. DQL (SELECT)
@@ -9,4 +10,11 @@ Oracle SQL 사용
     - Function
     - GROUPBY
     - JOIN
+    - SUBQUERY
+02. DDL
+    - CREATE TABLE
+    - ALTER , DROP
+03. DML
+    - INSERT
+
 
