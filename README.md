@@ -16,5 +16,14 @@ Oracle SQL 사용
     - ALTER , DROP
 03. DML
     - INSERT
+    - UPDATE
+    - DELETE
+04. DCL
+    - GRANT
+    - REVOKE
+05. TCL
+    - COMMIT
+    - ROLLBACK
+06. VIEW
 
 
