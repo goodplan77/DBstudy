@@ -350,11 +350,13 @@ END;
 BEGIN
     FOR I IN 2..9
     LOOP
+        IF MOD(I,2) = 0 THEN
         FOR J IN 1..9
         LOOP
             DBMS_OUTPUT.PUT_LINE(I || ' * ' || J || ' = ' || I*J);
         END LOOP;
             DBMS_OUTPUT.PUT_LINE('---------');
+        END IF;
     END LOOP;
 END;
 /
@@ -366,11 +368,13 @@ DECLARE
 BEGIN
     WHILE I < 10
     LOOP
+        IF MOD(I,2) = 0 THEN
         WHILE J < 10
         LOOP
             DBMS_OUTPUT.PUT_LINE(I || ' * ' || J || ' = ' || I*J);
             J := J + 1;
         END LOOP;
+        END IF ;
             J := 1;
             I := I + 1;
             DBMS_OUTPUT.PUT_LINE('---------');
