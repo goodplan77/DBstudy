@@ -25,5 +25,18 @@ Oracle SQL 사용
     - COMMIT
     - ROLLBACK
 06. VIEW
+    - CREATE
+    - USING DML
+    - OPTION
+07. SEQUENCE
+    - CREATE
+    - CURRVAL / NEXTVAL
+    - ALTER SEQUENCE
+08. INDEX
+    - CREATE INDEX
+09. PL/SQL
+    - CREATE
+    - CONDITION
+    - LOOP
 
 
