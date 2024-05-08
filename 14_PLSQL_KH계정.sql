@@ -345,6 +345,26 @@ BEGIN
 END;
 /
 
+-- 1 풀이
+
+DECLARE
+    EMP EMPLOYEE%ROWTYPE;
+    YSALARY EMPLOYEE.SALARY%TYPE;
+BEGIN
+    SELECT *
+    INTO EMP
+    FROM EMPLOYEE
+    WHERE EMP_ID = &사번;
+    
+    IF EMP.BONUS IS NULL
+        THEN YSALARY := EMP.SALARY *12;
+    ELSE YSALARY := EMP.SALARY * (1 + EMP.BONUS) * 12;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE(EMP.EMP_NAME || '의 연봉 : ' || YSALARY);
+END;
+/
+
 -- 2. 구구단 짝수 (FOR , WHILE)
 -- 2-1) FOR LOOP
 BEGIN
@@ -356,6 +376,21 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE(I || ' * ' || J || ' = ' || I*J);
         END LOOP;
             DBMS_OUTPUT.PUT_LINE('---------');
+        END IF;
+    END LOOP;
+END;
+/
+
+-- 2-1) 풀이
+BEGIN
+    FOR DAN IN 2..9
+    LOOP
+        IF MOD(DAN , 2) = 0 THEN
+        FOR SU IN 1..9
+        LOOP
+        DBMS_OUTPUT.PUT_LINE(DAN || ' * ' || SU || ' = ' || DAN*SU);
+        END LOOP;
+        DBMS_OUTPUT.PUT_LINE('');
         END IF;
     END LOOP;
 END;
@@ -374,9 +409,31 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE(I || ' * ' || J || ' = ' || I*J);
             J := J + 1;
         END LOOP;
+            DBMS_OUTPUT.PUT_LINE('---------');
         END IF ;
             J := 1;
             I := I + 1;
-            DBMS_OUTPUT.PUT_LINE('---------');
     END LOOP;
 END;
+/
+
+-- 2-2) 풀이
+DECLARE
+    DAN NUMBER := 2;
+    SU NUMBER := 1;
+BEGIN
+    WHILE DAN < 10
+    LOOP
+        SU := 1;
+        IF MOD (DAN , 2) = 0 THEN
+        WHILE SU < 10
+        LOOP
+            DBMS_OUTPUT.PUT_LINE(DAN || ' * ' || SU || ' = ' || DAN*SU);
+            SU := SU +1;
+        END LOOP;
+        DBMS_OUTPUT.PUT_LINE('');
+        END IF;
+        DAN := DAN +1;
+    END LOOP;
+END;
+/
