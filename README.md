@@ -38,5 +38,12 @@ Oracle SQL 사용
     - CREATE
     - CONDITION
     - LOOP
+10. Procedure
+    - CREATE
+    - PARAMETER
+    - FUNCTION
+11. Trigger
+    - CREATE
+12. JDBC
 
 
