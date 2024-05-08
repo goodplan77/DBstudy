@@ -437,3 +437,78 @@ BEGIN
     END LOOP;
 END;
 /
+
+
+/*
+    4) 예외 처리부
+    
+    예외(EXCEPTION) : 실행중 발생하는 오류
+    
+    [표현식]
+    EXCEPTION
+        WHEN 예외명1 THEN 예외처리구문1;
+        WHEN 예외명2 THEN 예외처리구문2;
+        WHEN OTHERS THEN 예외처리구문N;
+        
+    * 시스템 예외 (오라클에서 이미 정의해둔 예외)
+    - NO_DATA_FOUND : SELECT한 결과가 한 행도 없는 경우.
+    - TOO_MANY_ROWS : SELECT한 결과가 여러행인 경우.
+    - ZERO_DIVIDE   : 0으로 나눌때
+    - DUP_VAL_ON_INDEX : UNIQUE 제약 조건에 위배
+    ...
+*/
+
+-- 사용자가 입력한 숫자로 나눗셈 연산한 결과를 출력.
+DECLARE
+    RESULT NUMBER;
+BEGIN
+    RESULT := 10 / &숫자;
+    DBMS_OUTPUT.PUT_LINE('결과 : ' || RESULT);
+EXCEPTION
+    --  ZERO_DIVIDE THEN  DBMS_OUTPUT.PUT_LINE('0으로 나눌 수 없습니다.');
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('0으로 나눌 수 없습니다.');
+END;
+/
+
+-- UNIQUE 제약 조건 위배
+BEGIN
+    UPDATE EMPLOYEE
+    SET EMP_ID = 200
+    WHERE EMP_NAME = '노옹철';
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN DBMS_OUTPUT.PUT_LINE('이미 존재 하는 사번입니다.');
+END;
+/
+
+-- TOO_MANY_ROWS , NO_DATA_FOUND
+DECLARE
+    EID EMPLOYEE.EMP_ID%TYPE;
+    ENAME EMPLOYEE.EMP_NAME%TYPE;
+BEGIN
+    SELECT EMP_ID , EMP_NAME
+    INTO EID , ENAME
+    FROM EMPLOYEE
+    WHERE EMP_ID = &사번 OR EMP_ID = 200;
+    
+    DBMS_OUTPUT.PUT_LINE('사번 : ' || EID || ' 사원명 : ' || ENAME);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN DBMS_OUTPUT.PUT_LINE('존재 하지 않은 사원입니다.');
+    WHEN TOO_MANY_ROWS THEN DBMS_OUTPUT.PUT_LINE('너무 많은 행이 조회되었습니다.');
+
+END;
+/
+
+-- 사용자 정의 예외 생성
+DECLARE
+    DUP_EMPNO EXCEPTION;
+    PRAGMA EXCEPTION_INIT(DUP_EMPNO , -00001);
+BEGIN
+
+    UPDATE EMPLOYEE SET
+    EMP_ID = 200
+    WHERE EMP_NAME = '노옹철';
+EXCEPTION
+    WHEN DUP_EMPNO THEN DBMS_OUTPUT.PUT_LINE('이미 존재 하는 사번입니다.');
+END;
+/
