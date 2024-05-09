@@ -1,9 +1,10 @@
 package com.kh.chap01_process;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import oracle.jdbc.driver.OracleDriver;
+import java.sql.Statement;
 
 public class JDBCProcess {
 	
@@ -37,6 +38,7 @@ public class JDBCProcess {
 		 * 4) SQL문 실행		:	Statement 객체를 통해서 SQL문 실행
 		 * 5) 결과값 반환		:	수행한 SQL 문이 select인 경우 ResultSet 객체 , DML문 일 경우 int 자료형 값 반환
 		 * 6) 트랜잭션처리		:	ResultSet 내부의 데이터들을 알맞는 vo객체로 변환
+		 * 7) 사용한 자원 반납	:	
 		 */
 		
 		// 1) 오라클 Driver 등록
@@ -65,7 +67,45 @@ public class JDBCProcess {
 		// 3) DBMS 연결 -> Connection 객체 생성
 		// DriverManger.getConnection("jdbcurl 주소" , "계정" , "비밀번호");
 		try {
-			DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","C##JDBC","JDBC");
+			Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","C##JDBC","JDBC");
+			// url -> jdbc (프로토콜):oracle:thin(서브프로토콜):@localhost:1521:xe(서브네임 : 연결하고자 하는 데이터베이스의 연결 정보)
+			System.out.println(conn);
+			
+			// 4) Statement 객체 생성
+			Statement stmt = conn.createStatement();
+			
+			// 5) DB에 sql 문을 전달하면서 실행
+			boolean result = stmt.execute("SELECT 'HELLO JDBC' AS TEST FROM DUAL");
+			
+			// 6) 결과값 받기 (select : getResultSet(); || DML : getUpdateCount())
+			if(result) {
+				// select일때
+				ResultSet rset = stmt.getResultSet();
+				// update일때 -> select절 에서는 사용하지 않는다.
+				int updatedCount = stmt.getUpdateCount();
+				
+				if(rset.next()) {
+					System.out.println(rset.getString("TEST")); // 대소문자 가리지 않음.
+					System.out.println(rset.getString(1)); // 숫자 기술 가능
+					System.out.println(rset.getObject(1)); // 타입을 모를경우?					
+					// 칼럼명 TEST를 통해 값 받아옴
+					System.out.println(updatedCount);
+					// 받아온 값이 select 를 통해서 update가 일어나지 않았음 : -1
+				}
+			}
+			
+			// 5+6) execute(sql) + getResultSet() -> executeQuery(sql); SQL이 SELECT문인 경우
+			//		execute(sql) + getUpdateCount() -> executeUpdate(sql); SQL이 DML인 경우
+			ResultSet rset = stmt.executeQuery("SELECT 'HELLO JDBC' AS STR FROM DUAL");
+			if(rset.next()) {
+				System.out.println(rset.getString("STR"));
+			}
+			
+			// 7) 자원반납 close()
+			conn.close();
+			stmt.close();
+			rset.close();
+			// 순서 주의
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
