@@ -45,5 +45,8 @@ Oracle SQL 사용
 11. Trigger
     - CREATE
 12. JDBC
+    - Basic 
+    - CRUD
+    - MVC Practice
 
 
