@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>member_mapper</comment>
+	<entry key="insertMember">
+		INSERT INTO
+		MEMBER VALUES(
+			SEQ_UNO.NEXTVAL , ?,?,?,?,?,?,?,?, SYSDATE,SYSDATE,DEFAULT
+		)
+	</entry>
+	<entry key = "selectAll">
+		SELECT * 
+		FROM MEMBER 
+		WHERE STATUS = 'Y' 
+		ORDER BY USER_NO ASC
+	</entry>
+	
+	<entry key = "selectbyUserId">
+		SELECT * 
+		FROM MEMBER 
+		WHERE USER_ID = ? AND STATUS = 'Y'
+	</entry>
+	
+	<entry key = "selectByUserName">
+		SELECT * 
+		FROM MEMBER 
+		WHERE USER_NAME LIKE ? AND STATUS = 'Y' 
+		ORDER BY USER_NO ASC
+	</entry>
+	
+	<entry key = "selectByUser">
+		SELECT COUNT(*) 
+		FROM MEMBER 
+		WHERE USER_ID = ? AND USER_PWD = ? AND STATUS = 'Y'
+	</entry>
+	
+	<entry key = "updateMember">
+		UPDATE MEMBER SET 
+		EMAIL = ? , PHONE = ? , ADDRESS = ? , MODIFY_DATE = SYSDATE 
+		WHERE USER_ID = ?
+	</entry>
+	
+	<entry key = "deleteMember">
+		UPDATE MEMBER SET 
+		STATUS = 'N' , MODIFY_DATE = SYSDATE 
+		WHERE USER_ID = ? AND USER_PWD = ? AND STATUS = 'Y'
+	</entry>
+</properties> 

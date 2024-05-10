@@ -1,11 +1,16 @@
 package com.kh.chap03_MVC.model.dao;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
+import java.util.Properties;
 
 import com.kh.common.template.JDBCTemplate;
 import static  com.kh.common.template.JDBCTemplate.*;
@@ -18,6 +23,19 @@ import com.kh.model.vo.Member;
  */
 public class MemberDao {
 	
+	private Properties prop = new Properties();
+	
+	public MemberDao() {
+		try {
+			prop.loadFromXML(new FileInputStream("resources/member_mapper.xml"));
+		} catch (InvalidPropertiesFormatException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * 사용자가 view 에서 입력한 값을 가지고 DB에 INSERT 문을 실행하는 메소드
@@ -29,8 +47,7 @@ public class MemberDao {
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
-		String sql = "INSERT INTO MEMBER VALUES("
-				+ "SEQ_UNO.NEXTVAL,?,?,?,?,?,?,?,?,SYSDATE,SYSDATE,DEFAULT)";
+		String sql = prop.getProperty("insertMember");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -66,7 +83,7 @@ public class MemberDao {
 		String sql = "";
 		ResultSet rset = null;
 		
-		sql = "SELECT * FROM MEMBER WHERE STATUS = 'Y' ORDER BY USER_NO ASC";
+		sql = prop.getProperty("selectAll");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
@@ -128,7 +145,7 @@ public class MemberDao {
 		String sql = null;
 		ResultSet rset = null;
 		
-		sql = "SELECT * FROM MEMBER WHERE USER_ID = ? AND STATUS = 'Y'";
+		sql = prop.getProperty("selectbyUserId");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userId);
@@ -159,7 +176,7 @@ public class MemberDao {
 		String sql = null;
 		ResultSet rset = null;
 		
-		sql = "SELECT * FROM MEMBER WHERE USER_NAME LIKE ? AND STATUS = 'Y' ORDER BY USER_NO ASC";
+		sql = prop.getProperty("selectByUserName");
 		// sql = "SELECT * FROM MEMBER WHERE INSTR(USER_NAME , ?) > 0 AND STATUS = 'Y'";
 		// pstmt.setString(1, keyword);
 		
@@ -204,7 +221,7 @@ public class MemberDao {
 		int result = 0;
 		ResultSet rset = null;
 		
-		sql = "SELECT COUNT(*) FROM MEMBER WHERE USER_ID = ? AND USER_PWD = ? AND STATUS = 'Y'";
+		sql = prop.getProperty("selectByUser");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userId);
@@ -229,7 +246,7 @@ public class MemberDao {
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
-		String sql = "UPDATE MEMBER SET EMAIL = ? , PHONE = ? , ADDRESS = ? , MODIFY_DATE = SYSDATE WHERE USER_ID = ?";
+		String sql = prop.getProperty("updateMember");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -253,7 +270,7 @@ public class MemberDao {
 		
 		int result = 0;
 		PreparedStatement pstmt = null;
-		String sql = "UPDATE MEMBER SET STATUS = 'N' , MODIFY_DATE = SYSDATE WHERE USER_ID = ? AND USER_PWD = ? AND STATUS = 'Y'";
+		String sql = prop.getProperty("deleteMember");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
